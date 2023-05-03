@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-
+import url from "url";
 import fetch from "node-fetch";
 
 // scraping f1 drivers
@@ -64,6 +64,7 @@ async function getNewsFromDenmark() {
     // });
 
     const headers = [];
+    const baseUrl = "https://cointelegraph.com";
 
     $(".tag-page > .container ").each((i, el) => {
       $(el)
@@ -74,9 +75,12 @@ async function getNewsFromDenmark() {
             .text()
             .trim();
           const text = $(el).find(".post-card-inline__text").text();
+          const link = $(el).find("a").attr("href");
+          const fullUrl = url.resolve(baseUrl, link);
           headers.push({
             title,
             text,
+            fullUrl,
           });
         });
 
